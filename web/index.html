@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lluvia extrema en Costa Rica — práctica</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>¿Llueve más fuerte en menos tiempo?</h1>
+    <p>Tendencia de días de lluvia extrema por sitio.</p>
+  </header>
+
+  <div id="aviso" hidden></div>
+
+  <main>
+    <section>
+      <h2>Resumen por sitio</h2>
+      <table id="tabla">
+        <thead>
+          <tr><th>Sitio</th><th>Estado</th><th>Días extremos por década</th><th>p ajustado</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p class="nota">Haga clic en una fila para ver la serie anual.</p>
+    </section>
+
+    <section>
+      <h2 id="titulo-detalle">Detalle</h2>
+      <svg id="grafico" viewBox="0 0 600 260" role="img" aria-label="Días extremos por año"></svg>
+    </section>
+
+    <section id="metodo">
+      <h2>Método y límites</h2>
+      <ul></ul>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Entornos y caché
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+.DS_Store
+
+# Secretos: NUNCA se suben
+.env
+*.key
+earthdata*.txt
+.netrc
+
+# Datos y resultados que se regeneran con los scripts (pesan y no se versionan)
+/analisis/data/
+/analisis/results/
+
+# Nota: web/data/resultados.json SÍ se sube (es lo que lee la web)

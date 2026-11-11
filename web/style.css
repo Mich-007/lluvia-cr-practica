@@ -1,0 +1,13 @@
+body { font-family: system-ui, sans-serif; margin: 0; color: #222; background: #fafafa; }
+header { background: #1f4e79; color: #fff; padding: 1.2rem 1.5rem; }
+header h1 { margin: 0 0 .3rem; font-size: 1.5rem; }
+header p { margin: 0; opacity: .9; }
+main { max-width: 860px; margin: 0 auto; padding: 1rem 1.5rem 3rem; }
+#aviso { background: #fff3cd; border-left: 6px solid #e0a800; padding: .8rem 1.5rem; }
+table { border-collapse: collapse; width: 100%; background: #fff; }
+th, td { padding: .5rem .7rem; border-bottom: 1px solid #ddd; text-align: left; }
+tbody tr { cursor: pointer; }
+tbody tr:hover, tbody tr.activa { background: #eaf2fb; }
+.nota { color: #666; font-size: .9rem; }
+.estado { font-weight: 600; }
+svg { width: 100%; height: auto; background: #fff; border: 1px solid #ddd; }

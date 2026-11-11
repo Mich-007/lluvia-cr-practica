@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:   # este nombre es el que se marca como "requerido" en la protección de main
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: analisis
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: analisis/requirements.txt
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Pruebas
+        run: pytest -v
+
+      - name: Flujo completo con datos sintéticos
+        run: |
+          python 01_generar_datos_sinteticos.py
+          python 02_extraer_sitios.py
+          python 03_calcular_tendencias.py
+          python 04_graficar.py
+
+      - name: Revisar que resultados.json tenga la forma esperada
+        run: |
+          python - <<'EOF'
+          import json
+          d = json.load(open("../web/data/resultados.json", encoding="utf-8"))
+          assert "meta" in d and "sitios" in d, "Falta meta o sitios"
+          for s in d["sitios"]:
+              for campo in ("id", "estado", "pendiente_dias_dec", "p_holm", "anios", "conteo"):
+                  assert campo in s, f"{s.get('id')}: falta {campo}"
+              assert s["estado"] in ("creciente", "decreciente", "no_concluyente")
+          print("✔ resultados.json válido")
+          EOF
+
+      - name: Buscar secretos por descuido
+        working-directory: .
+        run: |
+          if grep -rIEn "(api[_-]?key|secret|password|token)\s*[:=]\s*['\"][A-Za-z0-9_\-]{12,}" --include=*.py --include=*.js --include=*.json --include=*.md . ; then
+            echo "✘ Posible secreto en el código"; exit 1
+          fi
+          echo "✔ Sin secretos evidentes"
