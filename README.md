@@ -36,7 +36,7 @@ pytest -v                            # debe decir: 8 passed
 
 Ver la web: `cd ../web && python -m http.server 8000` y abrir http://localhost:8000
 
-## Quién toca qué
+## Quién toca qué?
 
 | Área | Carpeta / archivo |
 | --- | --- |
