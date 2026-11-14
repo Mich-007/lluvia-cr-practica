@@ -1,0 +1,7 @@
+# Netlify. Las cabeceras de seguridad salen de public/_headers (generado por `npm run headers`).
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+.vercel/
+.netlify/
+.wrangler/
+.DS_Store
+*.log
+
+# Datos pesados del análisis (se generan localmente; NO se suben)
+../data/

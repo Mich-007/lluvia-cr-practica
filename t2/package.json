@@ -1,0 +1,22 @@
+{
+  "name": "mesoamerica-resiliente-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Atlas interactivo de tendencias de lluvia extrema (NASA GPM IMERG). Sitio estático.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/sync-headers.mjs && vite build && node scripts/verificar.mjs",
+    "preview": "vite preview --host",
+    "headers": "node scripts/sync-headers.mjs",
+    "verificar": "node scripts/verificar.mjs",
+    "muestra": "node scripts/generar_muestra.mjs"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}

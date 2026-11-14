@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mesoamérica Resiliente · Atlas de lluvia extrema</title>
+    <meta
+      name="description"
+      content="Atlas interactivo de tendencias de días de lluvia extrema en Centroamérica con datos NASA GPM IMERG. Herramienta de planificación, no es un pronóstico."
+    />
+    <meta name="theme-color" content="#14272f" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:title" content="Mesoamérica Resiliente · Atlas de lluvia extrema" />
+    <meta property="og:description" content="Tendencias de días de lluvia extrema con datos NASA GPM IMERG." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  </head>
+  <body>
+    <div class="fondo" aria-hidden="true"><span class="gota g1"></span><span class="gota g2"></span><span class="gota g3"></span><span class="gota g4"></span><span class="gota g5"></span></div>
+    <a class="saltar" href="#principal" data-i="nav.skip">Saltar al contenido</a>
+
+    <header class="navbar" id="navbar">
+      <a class="marca" href="#inicio" data-ia="aria-label:nav.home_aria" aria-label="Mesoamérica Resiliente, inicio">
+        <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".45"/><circle cx="16" cy="16" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".7"/><circle cx="16" cy="16" r="3" fill="#d7f08c"/></svg>
+        <span>Mesoamérica Resiliente</span>
+      </a>
+      <nav class="nav" data-ia="aria-label:nav.sections" aria-label="Secciones">
+        <ul>
+          <li><a href="#inicio" data-i="nav.home">Inicio</a></li>
+          <li><a href="#mapa-seccion" data-i="nav.map">Mapa</a></li>
+          <li><a href="#comparacion" data-i="nav.comp">Comparación</a></li>
+          <li><a href="#metodo" data-i="nav.method">Método</a></li>
+        </ul>
+      </nav>
+      <div class="idioma" role="group" data-ia="aria-label:lang.group" aria-label="Idioma" data-activo="es">
+        <span class="idioma-gota" aria-hidden="true"></span>
+        <button type="button" data-lang="es" lang="es" data-ia="aria-label:lang.es" aria-label="Español" aria-pressed="true">ES</button>
+        <button type="button" data-lang="en" lang="en" data-ia="aria-label:lang.en" aria-label="English" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" class="btn btn-lima" id="abrir-asistente" data-i="nav.ask">Preguntar al asistente</button>
+    </header>
+
+    <div id="aviso-sintetico" class="aviso" role="alert" hidden></div>
+
+    <main id="principal">
+      <section class="portada" id="inicio" aria-labelledby="titulo">
+        <div class="portada-texto">
+          <h1 id="titulo" data-i="hero.h1">¿Dónde cambió la lluvia extrema en Centroamérica?</h1>
+          <p class="lead" data-i="hero.lead">
+            Mesoamérica Resiliente compara siete aeropuertos de la región, uno por país, y muestra cuántos días
+            al año superan un umbral de lluvia extrema, cuánto cambió esa cifra y con qué confianza estadística.
+          </p>
+          <div class="acciones">
+            <a class="btn btn-lima" href="#mapa-seccion" data-i="hero.cta1">Explorar el mapa</a>
+            <a class="btn btn-fantasma" href="#metodo" data-i="hero.cta2">Cómo se calcula</a>
+          </div>
+          <ul class="resumen-chips" id="hero-resumen" data-ia="aria-label:hero.chips_aria" aria-label="Resultados por tipo de tendencia"></ul>
+          <dl class="datos-clave">
+            <div><dt data-i="hero.k.countries">Países</dt><dd>7</dd></div>
+            <div><dt data-i="hero.k.res">Resolución</dt><dd>~10 km</dd></div>
+            <div><dt data-i="hero.k.ind">Indicador</dt><dd data-i="hero.k.indv">Días sobre el percentil 95</dd></div>
+            <div><dt data-i="hero.k.data">Datos</dt><dd>NASA GPM IMERG</dd></div>
+          </dl>
+        </div>
+        <div class="portada-visual" id="hero-visual" data-ia="aria-label:hero.visual_aria" aria-label="Ilustración de los siete sitios"></div>
+      </section>
+
+      <noscript><p class="aviso">Este atlas necesita JavaScript / This atlas needs JavaScript to show the map and the series.</p></noscript>
+      <div id="estado-carga" role="status" data-i="ui.loading">Cargando resultados…</div>
+
+      <div id="app" hidden>
+        <section class="seccion" id="mapa-seccion" aria-labelledby="t-mapa">
+          <div class="seccion-cab">
+            <h2 id="t-mapa" data-i="sec.map.h">Mapa regional</h2>
+            <p data-i="sec.map.p">Toca un punto del mapa o un botón de la lista para ver la serie anual y los datos de ese sitio.</p>
+          </div>
+
+          <div class="kpis" id="kpis" data-ia="aria-label:aria.kpis" aria-label="Datos generales"></div>
+
+          <div class="rejilla">
+            <div class="panel mapa-panel">
+              <div id="mapa" role="application" data-ia="aria-label:aria.mapa" aria-label="Mapa de los sitios analizados"></div>
+              <ul class="leyenda" id="leyenda" data-ia="aria-label:aria.leyenda" aria-label="Leyenda del mapa"></ul>
+              <ul id="lista-sitios" class="lista-sitios" data-ia="aria-label:aria.lista" aria-label="Sitios analizados"></ul>
+            </div>
+            <article class="panel detalle" id="detalle" aria-live="polite" data-ia="aria-label:aria.detalle" aria-label="Detalle del sitio"></article>
+          </div>
+        </section>
+
+        <section class="seccion" id="comparacion" aria-labelledby="t-comp">
+          <div class="seccion-cab">
+            <h2 id="t-comp" data-i="sec.comp.h">Comparación regional</h2>
+            <p data-i="sec.comp.p">Cada línea es el rango plausible (intervalo de confianza del 95 %) del cambio en días extremos por década. Si la línea cruza el 0, el resultado no es concluyente.</p>
+          </div>
+          <div class="panel" id="bosque"></div>
+        </section>
+
+        <section class="seccion" id="metodo" aria-labelledby="t-met">
+          <div class="seccion-cab">
+            <h2 id="t-met" data-i="sec.met.h">Método y límites</h2>
+            <p data-i="sec.met.p">Cuatro pasos reproducibles, y lo que este atlas no permite concluir.</p>
+          </div>
+          <ol class="pasos" id="pasos"></ol>
+          <div class="limites">
+            <div class="panel">
+              <h3 data-i="met.si">Qué sí muestra</h3>
+              <ul id="lista-si"></ul>
+            </div>
+            <div class="panel">
+              <h3 data-i="met.no">Qué no muestra</h3>
+              <ul id="lista-no"></ul>
+            </div>
+          </div>
+          <ul class="ficha-fuente" id="metodo-lista" data-ia="aria-label:aria.fuente" aria-label="Datos de la fuente"></ul>
+        </section>
+      </div>
+    </main>
+
+    <footer class="pie">
+      <p id="pie-fuente"></p>
+      <p data-i="foot.tool">Herramienta de planificación y priorización regional. No es un pronóstico ni una evaluación de pistas.</p>
+      <p>
+        <span data-i="foot.sources">Fuentes oficiales:</span>
+        <a href="https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/" target="_blank" rel="noopener noreferrer">NASA Space Apps 2026</a>,
+        <a href="https://gpm.nasa.gov/data/imerg" target="_blank" rel="noopener noreferrer">NASA GPM IMERG</a>,
+        <a href="https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDF_07/summary?keywords=imerg" target="_blank" rel="noopener noreferrer">GES DISC IMERG Final Daily V07</a>.
+      </p>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
