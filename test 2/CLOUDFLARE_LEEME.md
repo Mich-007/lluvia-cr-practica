@@ -4,7 +4,12 @@
 Esta versión ya no depende del Python: si no encuentra el servidor, la página pide los datos **directo a NASA POWER desde el navegador** y calcula lo mismo
 (se comprobó que los resultados coinciden con `backend.py`). El servidor de Python queda como opción para quien lo use en su computadora (añade los TXT).
 
-## Pasos (Pages conectado a GitHub o subida directa)
+## Lo más sencillo
+
+Cree una carpeta que contenga **solo** `Phyllobytes.html` renombrado a `index.html` y súbala a Cloudflare Pages (subida directa, sin comando de build).
+Es la página completa en un solo archivo. El análisis con NASA funciona directo desde el navegador (el respaldo `functions/` no se usa en este caso).
+
+## Pasos con la carpeta completa (Pages conectado a GitHub o subida directa)
 
 1. Suba la carpeta del proyecto. Lo importante es que **`web/index.html` y todo lo que hay dentro de `web/`** se publiquen completos
    (`css/`, `js/` con sus 13 archivos, `assets/`, `fonts/` y el archivo `_headers`).

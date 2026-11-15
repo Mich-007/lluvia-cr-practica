@@ -1,9 +1,29 @@
 # Phyllobytes · Lluvia fuerte en Costa Rica
 
-Atlas web con mapa de calor, gráficas por punto, sección para aprender y asistente virtual.
-Funciona de tres maneras:
+## La forma más fácil (para cualquier persona)
 
-0. **En línea (Cloudflare Pages u otro hosting estático):** ver `CLOUDFLARE_LEEME.md`. No necesita Python: analiza pidiendo los datos a NASA POWER desde el navegador.
+**Haga doble clic en `Phyllobytes.html`.** Es la página completa en un solo archivo: no necesita Python, instalación ni internet para verla
+(el análisis con datos reales de NASA sí necesita internet). Funciona en Windows, Mac y Linux con Chrome, Edge, Firefox o Safari recientes.
+Importante: descomprima el zip antes de abrirlo (no lo abra desde dentro del zip).
+
+## Otras formas de usarlo
+
+1. **En línea (Cloudflare, GitHub Pages, etc.):** suba `Phyllobytes.html` con el nombre `index.html`, o la carpeta `web/`. Ver `CLOUDFLARE_LEEME.md`.
+2. **Con el servidor de Python (opcional, añade los archivos TXT):**
+   - Windows: doble clic en `INICIAR_WINDOWS.bat`.
+   - Mac / Linux: doble clic en `INICIAR_MAC_LINUX.command` (o `python3 INICIAR_PHYLLOBYTES.py`).
+   - Spyder: abra `INICIAR_PHYLLOBYTES.py` y pulse F5.
+   Se abre en http://127.0.0.1:8768 (si ese puerto está ocupado usa el siguiente). Los resultados se guardan en `Descargas/Phyllobytes_resultados`
+   (o en otra carpeta con permiso de escritura si esa no existe).
+
+Si algo no abre: confirme que descomprimió TODA la carpeta. Para solo ver la página, `Phyllobytes.html` es suficiente.
+
+---
+
+Atlas web con mapa de calor, gráficas por punto, sección para aprender y asistente virtual.
+Funciona de estas maneras:
+
+0. **Un solo archivo o en línea:** ver arriba. No necesita Python: analiza pidiendo los datos a NASA POWER desde el navegador.
 1. **Solo la página (modo demostración):** abra `web/index.html` desde un servidor cualquiera. Verá una muestra con datos **inventados** (marcada con un aviso) para las 7 provincias.
 2. **Con el servidor de Python (datos reales de NASA, más los TXT):** el mismo `backend.py` del visor anterior descarga la lluvia diaria de **NASA POWER** (GPM IMERG o MERRA-2) para cualquier coordenada de Costa Rica, calcula las tendencias y guarda los TXT/CSV.
 
@@ -40,6 +60,7 @@ Los archivos se guardan en `Descargas/Phyllobytes_resultados`.
 
 | Archivo | Función |
 | --- | --- |
+| `Phyllobytes.html` | La página completa en un solo archivo (doble clic). Se regenera con `herramientas/construir_html_unico.py`. |
 | `backend.py` | Servidor local y cálculo estadístico (NASA POWER, percentiles, Theil–Sen, Mann–Kendall, exportación TXT/CSV). |
 | `INICIAR_PHYLLOBYTES.py` | Arranque para Spyder (F5). |
 | `web/index.html`, `web/css/`, `web/js/` | La página (JavaScript sin dependencias, funciona sin internet). |

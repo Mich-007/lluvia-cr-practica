@@ -10,6 +10,7 @@ import { lectura, resumenRegional, fichaTexto, provNombre } from "./texto.js";
 import { crearAsistente } from "./asistente.js";
 import * as a11y from "./a11y.js";
 import { FUENTES, descargar, calcular } from "./nasa.js";
+import { LUGARES } from "./lugares.js";
 
 const MAX = 8;
 const E = { sitios: [], sel: null, demo: true, servidor: false, ind: "extremos", anio: "todos", estilo: "bandas", lugares: [], n: 0, jobId: null, resultado: null, analizando: false };
@@ -372,7 +373,7 @@ function textosEstaticos() { aplicar(); $("buscar").setAttribute("placeholder", 
 async function iniciar() {
   aplicar(); a11y.aplicar();
   document.querySelectorAll(".idioma button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
-  try { E.lugares = await (await fetch("assets/places.json")).json(); } catch { E.lugares = []; }
+  E.lugares = LUGARES;
   E.sitios = enriquecer(sitiosDemo()); E.sel = E.sitios[0].id;
   mapa = crearMapa($("mapa"), {
     aria: t("aria.mapa"), alClicPunto: (id) => seleccionar(id, { verDetalle: true }),

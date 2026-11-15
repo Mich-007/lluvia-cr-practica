@@ -30,7 +30,32 @@ from typing import Optional
 
 ROOT = Path(__file__).resolve().parent
 WEB = ROOT / 'web'
-DATA = Path.home() / 'Downloads' / 'Phyllobytes_resultados'
+def _carpeta_datos():
+    """Primera carpeta donde se pueda escribir: así funciona en cualquier computadora, idioma o sistema."""
+    import os, tempfile
+    candidatos = [Path(os.environ['PHYLLOBYTES_DATOS'])] if os.environ.get('PHYLLOBYTES_DATOS') else []
+    try:
+        casa = Path.home()
+        candidatos += [casa / 'Downloads' / 'Phyllobytes_resultados', casa / 'Descargas' / 'Phyllobytes_resultados', casa / 'Phyllobytes_resultados']
+    except RuntimeError:
+        pass
+    candidatos += [ROOT / 'datos_phyllobytes', Path(tempfile.gettempdir()) / 'Phyllobytes_resultados']
+    for c in candidatos:
+        try:
+            c.mkdir(parents=True, exist_ok=True)
+            prueba = c / '.prueba_escritura'; prueba.write_text('ok'); prueba.unlink()
+            return c
+        except OSError:
+            continue
+    raise SystemExit('No encuentro una carpeta donde guardar los resultados. Defina la variable PHYLLOBYTES_DATOS con una carpeta con permiso de escritura.')
+
+
+def _comprobar_web():
+    if not (WEB / 'index.html').exists():
+        raise SystemExit('No encuentro web/index.html junto a backend.py.\nDescomprima TODA la carpeta del zip (no solo algunos archivos) y vuelva a abrir INICIAR_PHYLLOBYTES.py desde dentro de ella.\nBuscado en: ' + str(WEB))
+
+
+DATA = _carpeta_datos()
 CACHE = DATA / 'cache_nasa'
 REPORTS = DATA / 'resultados'
 POWER = 'https://power.larc.nasa.gov/api/temporal/daily/point'
@@ -772,7 +797,9 @@ def start_spyder(port=8767):
             return url
     except Exception:
         pass
-    _BACKGROUND_SERVER=ThreadingHTTPServer(('127.0.0.1',port),Handler)
+    _comprobar_web()
+    _BACKGROUND_SERVER,port=_servidor(port)
+    url=f'http://127.0.0.1:{port}'
     DATA.mkdir(parents=True,exist_ok=True)
     threading.Thread(target=_BACKGROUND_SERVER.serve_forever,daemon=True,name='VISOR NASA CR').start()
     print('Servidor web activo en',url,flush=True)
@@ -782,9 +809,19 @@ def start_spyder(port=8767):
     return url
 
 
+def _servidor(port):
+    """Abre el servidor en el primer puerto libre desde `port` (así no falla si otro programa usa ese puerto)."""
+    ultimo=None
+    for p in range(port,port+11):
+        try:return ThreadingHTTPServer(('127.0.0.1',p),Handler),p
+        except OSError as e:ultimo=e
+    raise SystemExit(f'No hay puertos libres entre {port} y {port+10}: {ultimo}')
+
+
 def serve(port=8765,open_browser=True):
     import webbrowser
-    server=ThreadingHTTPServer(('127.0.0.1',port),Handler)
+    _comprobar_web()
+    server,port=_servidor(port)
     DATA.mkdir(parents=True,exist_ok=True)
     url=f'http://127.0.0.1:{port}'
     print('Phyllobytes: abra',url,flush=True)
