@@ -1,0 +1,3 @@
+Tipografía del título: Batangas.
+Si tiene el archivo de la fuente, cópielo aquí con el nombre Batangas.woff2 (o Batangas.ttf) y la página lo usará sola.
+Mientras no esté, se usa una fuente redondeada del sistema (la página funciona igual).
