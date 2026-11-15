@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phyllobytes · Lluvia fuerte en Centroamérica</title>
+    <meta name="description" content="Phyllobytes: atlas de lluvia fuerte en los 7 países de Centroamérica con datos de NASA, Copernicus y CHIRPS." />
+    <meta name="theme-color" content="#08151a" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/png" href="assets/rana.png" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/atlas-tema.css?v=7.0" />
+    <link rel="stylesheet" href="css/phyllobytes.css?v=7.0" />
+    <link rel="stylesheet" href="css/unificado.css?v=7.0" />
+    <script src="assets/plotly.min.js"></script>
+    <script src="js/tema-plotly.js?v=7.0"></script>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <symbol id="i-inicio" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5M5.5 10v9.5h13V10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-mapa" viewBox="0 0 24 24"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4Zm0 0v14m6-12v14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+      <symbol id="i-datos" viewBox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7m5 7H3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-panel" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+      <symbol id="i-comparar" viewBox="0 0 24 24"><path d="M4 7h10m-10 5h16M4 17h7M17 5v4m-6 1v4m9 3v4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-calidad" viewBox="0 0 24 24"><path d="M12 3.5 5 6.2v5.3c0 4.3 3 7.6 7 9 4-1.4 7-4.7 7-9V6.2L12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m8.8 12.2 2.2 2.2 4.4-4.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-fuentes" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5 6v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6M5 12v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-6" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+      <symbol id="i-aprende" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5Zm0 0V19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+      <symbol id="i-metodo" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3M7.5 15h9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1" fill="currentColor"/><circle cx="12.5" cy="10.5" r="1" fill="currentColor"/><circle cx="16" cy="10.5" r="1" fill="currentColor"/></symbol>
+      <symbol id="i-acceso" viewBox="0 0 24 24"><circle cx="12" cy="4.8" r="1.9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.5 8.5 12 10l7.5-1.5M12 10v4.5m0 0-3 5.5m3-5.5 3 5.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-chev-izq" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6M19 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" transform="translate(-2 0)"/></symbol>
+      <symbol id="i-chev-der" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6M5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" transform="translate(2 0)"/></symbol>
+      <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s6.5-5.8 6.5-11A6.5 6.5 0 0 0 5.5 10c0 5.2 6.5 11 6.5 11Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+    </svg>
+
+    <div class="fondo" aria-hidden="true"><span class="hoja h1"></span><span class="hoja h2"></span><span class="hoja h3"></span></div>
+    <a class="saltar" href="#principal" data-i="nav.skip">Saltar al contenido</a>
+
+    <aside class="lateral" id="lateral" data-ia="aria-label:side.aria">
+      <div class="lateral-cab">
+        <a class="lateral-marca" href="#inicio" data-ia="aria-label:nav.home_aria">
+          <img class="rana-logo" src="assets/rana.png" alt="" width="44" height="52" />
+          <img class="wordmark" src="assets/wordmark-claro.png" alt="Phyllobytes" width="150" height="36" />
+        </a>
+        <div class="lateral-ctrl">
+          <button type="button" class="icon-btn sm" id="lat-min" aria-expanded="true" data-ia="aria-label:side.min;title:side.min"><svg class="ico"><use href="#i-chev-izq"/></svg></button>
+          <button type="button" class="icon-btn sm" id="lat-ocultar" data-ia="aria-label:side.hide;title:side.hide"><svg class="ico"><use href="#i-cerrar"/></svg></button>
+        </div>
+      </div>
+      <nav class="lateral-nav" data-ia="aria-label:nav.sections">
+        <p class="grupo" data-i="side.explore">Explorar</p>
+        <a class="item" href="#inicio"><svg class="ico"><use href="#i-inicio"/></svg><span data-i="nav.home">Inicio</span></a>
+        <a class="item" href="#mapa-seccion"><svg class="ico"><use href="#i-mapa"/></svg><span data-i="at.nav.analyze">Analizar</span></a>
+        <a class="item" href="#resultados"><svg class="ico"><use href="#i-datos"/></svg><span data-i="nav.results">Resultados</span></a>
+        <a class="item" href="#panel"><svg class="ico"><use href="#i-panel"/></svg><span data-i="at.nav.panel">Panel</span></a>
+        <a class="item" href="#comparacion"><svg class="ico"><use href="#i-comparar"/></svg><span data-i="nav.comp">Comparar</span></a>
+        <hr />
+        <p class="grupo" data-i="at.side.verify">Verificar</p>
+        <a class="item" href="#verificacion"><svg class="ico"><use href="#i-calidad"/></svg><span data-i="at.nav.quality">Calidad</span></a>
+        <a class="item" href="#validacion"><svg class="ico"><use href="#i-pin"/></svg><span data-i="at.nav.stations">Estaciones CR</span></a>
+        <a class="item" href="#recursos"><svg class="ico"><use href="#i-fuentes"/></svg><span data-i="at.nav.sources">Fuentes</span></a>
+        <hr />
+        <p class="grupo" data-i="side.learn">Aprender</p>
+        <a class="item" href="#aprende"><svg class="ico"><use href="#i-aprende"/></svg><span data-i="nav.learn">Aprende</span></a>
+        <a class="item" href="#metodo"><svg class="ico"><use href="#i-metodo"/></svg><span data-i="nav.method">Método</span></a>
+        <hr />
+        <p class="grupo" data-i="side.help">Ayuda</p>
+        <button type="button" class="item" id="lat-asistente"><svg class="ico"><use href="#i-chat"/></svg><span data-i="nav.assistant">Asistente</span></button>
+        <button type="button" class="item" id="lat-acceso"><svg class="ico"><use href="#i-acceso"/></svg><span data-i="nav.a11y">Accesibilidad</span></button>
+      </nav>
+      <div class="lateral-pie">
+        <span class="estado-servidor" id="chip-servidor" role="status"><i aria-hidden="true"></i><span data-i="srv.check">Buscando servidor…</span></span>
+        <p class="sub" data-i="side.foot">Hecho para entender la lluvia de Centroamérica.</p>
+      </div>
+    </aside>
+    <div class="velo-lateral" id="velo" hidden></div>
+
+    <div class="envoltura">
+      <header class="superior" id="superior">
+        <div class="sup-izq">
+          <button type="button" class="icon-btn" id="btn-menu" aria-controls="lateral" aria-expanded="true" data-ia="aria-label:nav.menu;title:nav.menu"><svg class="ico"><use href="#i-menu"/></svg></button>
+          <a class="marca-sup" href="#inicio" data-ia="aria-label:nav.home_aria"><img class="rana-mini" src="assets/rana.png" alt="" width="30" height="36" /><img class="wordmark-mini" src="assets/wordmark-claro.png" alt="Phyllobytes" height="22" /></a>
+        </div>
+        <nav class="pildoras" data-ia="aria-label:nav.sections">
+          <a href="#inicio" data-i="nav.home">Inicio</a>
+          <a href="#mapa-seccion" data-i="at.nav.analyze">Analizar</a>
+          <a href="#resultados" data-i="nav.results">Resultados</a>
+          <a href="#panel" data-i="at.nav.panel">Panel</a>
+          <a href="#verificacion" data-i="at.nav.quality">Calidad</a>
+          <a href="#aprende" data-i="nav.learn">Aprende</a>
+          <a href="#metodo" data-i="nav.method">Método</a>
+        </nav>
+        <div class="sup-der">
+          <div class="idioma" role="group" data-ia="aria-label:lang.group" data-activo="es">
+            <span class="idioma-gota" aria-hidden="true"></span>
+            <button type="button" data-lang="es" lang="es" data-ia="aria-label:lang.es" aria-pressed="true">ES</button>
+            <button type="button" data-lang="en" lang="en" data-ia="aria-label:lang.en" aria-pressed="false">EN</button>
+          </div>
+          <button type="button" class="pill-btn" id="btn-acceso" aria-expanded="false" aria-controls="panel-acceso" data-ia="aria-label:nav.a11y;title:nav.a11y"><svg class="ico"><use href="#i-acceso"/></svg><span class="pill-txt" data-i="nav.a11y_short">Accesibilidad</span></button>
+          <button type="button" class="pill-btn pill-cian" id="abrir-asistente" data-ia="aria-label:nav.assistant;title:nav.assistant"><svg class="ico"><use href="#i-chat"/></svg><span class="pill-txt" data-i="nav.ask">Asistente</span></button>
+        </div>
+        <section class="panel-acceso" id="panel-acceso" hidden role="dialog" data-ia="aria-label:a11y.title"></section>
+      </header>
+
+      <div id="aviso-idioma" class="aviso" role="status" hidden data-i="at.en_note">The figures, statistical notes and messages generated by the analysis are currently shown in Spanish.</div>
+      <div id="aviso-servidor" class="aviso" role="status" hidden data-i="at.no_server">Sin servidor no se pueden descargar ni analizar datos. Abre INICIAR_ATLAS.py en Spyder (F5) y recarga esta página.</div>
+
+      <main id="principal">
+        <!-- ======================= INICIO ======================= -->
+        <section class="portada" id="inicio" aria-labelledby="titulo">
+          <div class="portada-texto">
+            <p class="sobretitulo" data-i="hero.kicker">Centroamérica · lluvia y datos de satélite</p>
+            <h1 id="titulo" data-i="hero.h1">¿Cómo está cambiando la lluvia fuerte en Centroamérica?</h1>
+            <p class="lead" data-i="hero.lead">Phyllobytes convierte datos de satélites y modelos en mapas y gráficas fáciles de leer.</p>
+            <div class="acciones">
+              <a class="btn btn-cian" href="#mapa-seccion" data-i="hero.cta1">Explorar el mapa</a>
+              <a class="btn btn-fantasma" href="#aprende" data-i="hero.cta2">Aprender cómo funciona</a>
+            </div>
+            <ul class="resumen-chips" id="hero-resumen" data-ia="aria-label:hero.chips_aria" hidden></ul>
+            <dl class="datos-clave">
+              <div><dt data-i="hero.k.prov">Países</dt><dd>7</dd></div>
+              <div><dt data-i="hero.k.res">Detalle</dt><dd data-i="hero.k.resv">Celdas de 5 a 55 km</dd></div>
+              <div><dt data-i="hero.k.ind">Indicador</dt><dd data-i="hero.k.indv">Días de lluvia fuerte</dd></div>
+              <div><dt data-i="hero.k.data">Datos</dt><dd>NASA · Copernicus · CHIRPS</dd></div>
+            </dl>
+          </div>
+          <div class="portada-visual panel" data-ia="aria-label:hero.visual_aria"><div id="hero-mapa"></div><p class="sub portada-nota" data-i="hero.note">Toca un país para ir al mapa.</p></div>
+        </section>
+
+        <!-- ======================= ANALIZAR ======================= -->
+        <section class="seccion" id="mapa-seccion" aria-labelledby="t-mapa">
+          <div class="seccion-cab"><p class="sobretitulo" data-i="at.an.kicker">Tres pasos</p><h2 id="t-mapa" data-i="at.an.h">Analiza un lugar de Centroamérica</h2><p data-i="at.an.p">Elige los datos, toca el mapa para revisar la celda de cada lugar y pulsa «Analizar precipitación». Los ajustes recomendados ya vienen elegidos.</p></div>
+          <ol class="guia-pasos" aria-label="Pasos">
+            <li><a href="#paso-datos"><b>1</b><span data-i="at.step1">Datos y período</span></a></li>
+            <li><a href="#mapa"><b>2</b><span data-i="at.step2">Lugares en el mapa</span></a></li>
+            <li><a href="#paso-analizar"><b>3</b><span data-i="at.step3">Verificación y análisis</span></a></li>
+          </ol>
+
+          <div class="controls bloque-grid" id="seleccion">
+            <section class="panel paso" id="paso-datos"><h3><span class="step">01</span> <span data-i="at.s1.h">Fuente de precipitación</span></h3>
+              <select id="source" data-ia="aria-label:at.s1.h"><optgroup data-ia="label:at.src.auto" label="Descarga automática (sin cuenta)"><option value="gpm" data-i="at.src.gpm">GPM IMERG · satélite NASA (2001–hoy, ≈ 11 km)</option><option value="merra2" data-i="at.src.merra2">MERRA-2 · modelo de reanálisis NASA (1981–hoy, ≈ 55 km)</option><option value="era5" data-i="at.src.era5">ERA5 · reanálisis Copernicus/ECMWF (1940–hoy, ≈ 28 km)</option><option value="chirps_auto" data-i="at.src.chirps">CHIRPS · satélite + estaciones (1981–hoy, ≈ 5,5 km)</option></optgroup><optgroup data-ia="label:at.src.import" label="Importar un CSV que usted descargó"><option value="giovanni" data-i="at.src.giovanni">CSV exportado de Giovanni (IMERG, TRMM, GLDAS)</option><option value="hydrology" data-i="at.src.hydrology">CSV exportado de Hydrology Time Series (GLDAS)</option><option value="csv" data-i="at.src.csv">CSV propio (estación local u otro producto)</option></optgroup></select>
+              <p class="hint" id="sourceHint">IMERG Final histórico; en fechas recientes NASA POWER puede servir IMERG Late. Acumulado diario UTC en mm.</p>
+              <div class="grid-badge" id="gridHint">Malla: IMERG 0,1° × 0,1° · cada celda ≈ 11 × 11 km</div>
+              <div id="csvBlock" hidden><p class="hint" data-i="at.s1.csv">Importa una serie diaria o subdiaria de precipitación y declara producto, unidad y horario. El mapa no convierte un promedio de área en dato puntual.</p><div id="csvFiles"></div></div><div id="stationBlock" hidden><p class="hint" data-i="at.s1.station">Elige una estación regional para cada punto. La serie se representará en la coordenada real de la estación.</p><div id="stationInputs"></div></div>
+            </section>
+            <section class="panel paso"><h3><span class="step">02</span> <span data-i="at.s2.h">Intervalo de estudio</span></h3>
+              <div class="double"><label><span data-i="at.s2.from">Desde</span> <input id="startYear" type="number" min="1900" max="2026" value="2001"/></label><label><span data-i="at.s2.to">Hasta</span> <input id="endYear" type="number" min="1900" max="2026" value="2024"/></label></div>
+              <div class="double"><label><span data-i="at.s2.rs">Referencia inicial</span><input id="refStart" type="number" min="1900" max="2026" value="2001"></label><label><span data-i="at.s2.re">Referencia final</span><input id="refEnd" type="number" min="1900" max="2026" value="2020"></label></div>
+              <p class="hint" data-i="at.s2.hint">Los percentiles se calculan sobre el período de referencia. Los años incompletos no se suman como totales anuales. Para tendencias se recomiendan ≥ 20 años completos y referencia de ≥ 20 años.</p>
+            </section>
+            <section class="panel paso"><h3><span class="step">03</span> <span data-i="at.s3.h">Estadísticos de extremos</span></h3>
+              <div class="checkrow" id="pctchecks"><label><input type="checkbox" value="80" checked>P80</label><label><input type="checkbox" value="90" checked>P90</label><label><input type="checkbox" value="95" checked>P95</label><label><input type="checkbox" value="98">P98</label><label><input type="checkbox" value="99" checked>P99</label></div>
+              <label class="full-label"><span data-i="at.s3.pop">Muestra para percentiles</span><select id="population"><option value="wet" data-i="at.s3.wet">Solamente días lluviosos</option><option value="all" data-i="at.s3.all">Todos los días válidos</option></select></label>
+              <label class="full-label"><span data-i="at.s3.wetmin">Día lluvioso, desde (mm)</span><input id="wetMin" type="number" value="1" min="0" max="10" step="0.5"></label>
+            </section>
+          </div>
+
+          <div class="analizar-grid">
+            <section class="map-shell" id="mapa"><div class="map-bar"><div><strong data-i="at.map.title">Explorador geográfico</strong><small data-i="at.map.sub">Clic en cualquier coordenada de los 7 países · hasta seis puntos por análisis</small></div><div class="map-badges"><span id="mapmode">Mapa geográfico</span><span id="gridBadge">IMERG 0,1°</span><span>WGS84</span></div></div><div class="map-space">
+              <div id="leafletMap" class="leaflet-map" hidden></div><svg id="fallbackMap" class="fallback-map" viewBox="0 0 1000 840" preserveAspectRatio="xMidYMid meet" role="img" data-ia="aria-label:aria.mapa"><rect x="0" y="0" width="1000" height="840" fill="#0d2329"/><g id="fallbackCountries"></g><g id="fallbackCells"></g><g id="fallbackSites"></g><g id="fallbackMarkers"></g><g id="fallbackThematic"></g></svg>
+              <img class="marca-agua marca-agua-mapa atlas-marca-mapa" src="assets/marca-agua.png" alt="" aria-hidden="true" draggable="false" />
+              <div class="map-guide"><span class="dot orange"></span><span data-i="at.map.ref">Referencia</span> <span class="dot green"></span><span data-i="at.map.chosen">Punto elegido</span> <span class="sq"></span><span data-i="at.map.cell">Celda del producto</span></div>
+              <div id="cellCard" class="cell-card" hidden></div>
+              <div class="map-note" data-i="at.map.note">Cada cuadro es la celda que mide el producto. Los círculos representan puntos analizados, sin interpolar áreas.</div>
+              <div id="floatingChart" class="floating-chart" hidden>
+                <div id="floatHandle" class="floating-head"><strong id="floatTitle">Gráfico sobre el mapa</strong><button id="floatClose" data-ia="title:at.map.hide;aria-label:at.map.hide" title="Ocultar gráfico" type="button">×</button></div>
+                <div id="mapFloatChart" class="float-plot"></div>
+              </div>
+            </div>
+            <div class="map-toolbar">
+              <label><span data-i="at.mt.metric">Métrica en mapa</span> <select id="mapMetric"><option value="fixed_days" data-i="at.mt.fixed_days">Días ≥ umbral fijo</option><option value="fixed_change" data-i="at.mt.fixed_change">Cambio de tendencia (%)</option><option value="fixed_slope" data-i="at.mt.fixed_slope">Tendencia (días/década)</option><option value="threshold" data-i="at.mt.threshold">Umbral percentil (mm/día)</option><option value="extreme_days" data-i="at.mt.extreme_days">Días extremos Pxx (n)</option><option value="extreme_mm" data-i="at.mt.extreme_mm">Lluvia de días extremos (mm)</option><option value="episodes" data-i="at.mt.episodes">Episodios extremos (n)</option><option value="max_daily" data-i="at.mt.max_daily">Máximo diario (mm)</option><option value="trend" data-i="at.mt.trend">Tendencia anual (mm/década)</option><option value="pct_change" data-i="at.mt.pct_change">Cambio días &gt; Pxx (%)</option><option value="pct_slope" data-i="at.mt.pct_slope">Tendencia días &gt; Pxx (días/década)</option><option value="coverage" data-i="at.mt.coverage">Cobertura de datos (%)</option></select></label>
+              <label id="mapFixedWrap"><span data-i="at.mt.fixed">Umbral de lluvia diaria</span> <select id="mapFixed"><option value="50.8">≥ 50,8 mm</option><option value="76.2">≥ 76,2 mm</option><option value="101.6">≥ 101,6 mm</option><option value="127">≥ 127 mm</option></select></label>
+              <label id="mapPctWrap"><span data-i="at.mt.pct">Percentil</span> <select id="mapPct"><option value="90">P90</option><option value="95" selected>P95</option><option value="99">P99</option></select></label>
+              <label><span data-i="at.mt.year">Año</span> <select id="mapYear"><option value="all" data-i="at.mt.all">Serie completa</option></select></label>
+              <label><span data-i="at.mt.chart">Gráfico</span> <select id="mapChartMode"><option value="fixed" data-i="at.mt.c_fixed">Días ≥ umbral fijo</option><option value="events" data-i="at.mt.c_events">Solo extremos</option><option value="annual" data-i="at.mt.c_annual">Lluvia anual</option><option value="thresholds" data-i="at.mt.c_thr">Percentiles</option></select></label>
+              <label class="check-inline"><input type="checkbox" id="showCells" checked> <span data-i="at.mt.cells">Mostrar celdas</span></label>
+              <button class="line-btn" id="toggleFloat" disabled data-i="at.mt.float">Superponer gráfico en mapa</button>
+            </div>
+            <p class="map-explainer" id="mapExplainer">Tras el análisis, el mapa mostrará la media anual de días con lluvia ≥ 50,8 mm en los puntos elegidos.</p>
+            </section>
+
+            <aside class="controls lugares panel panel-acento-suave" aria-labelledby="t-lugares">
+              <section class="places-section"><h3 id="t-lugares"><span class="step">04</span> <span data-i="at.s4.h">Lugares elegidos</span> <small id="pointCount">0/6</small></h3>
+                <div class="searchbar"><input id="placeSearch" list="names" autocomplete="off" data-ia="placeholder:at.s4.search;aria-label:at.s4.search" placeholder="Ciudad o parque nacional…"><datalist id="names"></datalist><button id="addPlace" class="square" data-ia="title:at.s4.searchbtn;aria-label:at.s4.searchbtn" title="Buscar ciudad o parque">+</button></div>
+                <div class="smallnote"><strong data-i="at.s4.free">Punto libre:</strong> <span data-i="at.s4.freep">haz clic en cualquier lugar de Centroamérica en el mapa. Verás la celda, su tamaño y si es apta antes de añadirla.</span></div>
+                <div id="selectedPoints" class="place-list"><div class="empty-points" data-i="at.s4.empty">Selecciona un lugar en el mapa o búscalo aquí.</div></div>
+                <button class="subtle-action" id="clearPoints" data-i="at.s4.clear">Limpiar puntos</button>
+                <details class="coordinate-entry"><summary data-i="at.s4.coords">Escribir coordenadas exactas</summary><input id="freePointName" type="text" maxlength="95" data-ia="placeholder:at.s4.name" placeholder="Nombre opcional"><div class="double"><label><span data-i="at.s4.lat">Latitud</span><input id="freeLat" type="number" min="5" max="19.5" step="any" placeholder="9.935"></label><label><span data-i="at.s4.lon">Longitud</span><input id="freeLon" type="number" min="-94" max="-76" step="any" placeholder="-84.091"></label></div><button id="addCoordinates" type="button" class="line-btn" data-i="at.s4.see">Ver celda de estas coordenadas</button></details>
+                <label class="full-label"><span data-i="at.s4.area">Área que representa cada punto</span><select id="areaMode"><option value="cell" data-i="at.s4.cell">1 celda del producto (recomendado)</option><option value="block3" data-i="at.s4.block3">Promedio 3 × 3 celdas · solo IMERG, máx. 3 puntos</option></select></label>
+                <p class="hint" id="areaHint">El producto entrega un valor por celda: no se puede pedir un área más pequeña que la celda. Cada clic muestra la celda real que se usará.</p>
+              </section>
+              <a class="ir-analizar" href="#paso-analizar" data-i="at.s4.next">Siguiente: verificación y análisis ↓</a>
+            </aside>
+          </div>
+
+          <div class="controls bloque-grid analizar-final" id="paso-analizar">
+            <section class="panel paso paso-ancho"><h3><span class="step">05</span> <span data-i="at.s5.h">Calidad y verificación por punto</span> <small data-i="at.optional">opcional</small></h3>
+              <div class="dos-col">
+                <div>
+                  <label class="full-label"><span data-i="at.s5.rob">Robustez de la tendencia entre productos</span><select id="robustness"><option value="fast" selected data-i="at.s5.rob_fast">IMERG + MERRA-2 + ERA5 (rápido)</option><option value="full" data-i="at.s5.rob_full">IMERG + MERRA-2 + ERA5 + CHIRPS (completo; CHIRPS tarda ~3 min por punto la primera vez)</option><option value="off" data-i="at.s5.rob_off">No comparar</option></select></label><p class="hint" data-i="at.s5.rob_hint">Recalcula la tendencia anual con otros productos en el mismo punto y período común. Alimenta el semáforo de confianza.</p>
+                  <label class="full-label"><span data-i="at.s5.suspect">Revisar lluvia diaria mayor de (mm)</span><input id="suspectMm" type="number" min="1" value="500"></label><p class="hint" data-i="at.s5.suspect_hint">El valor sospechoso se conserva y se marca para revisar.</p>
+                </div>
+                <div>
+                  <label class="full-label"><span data-i="at.s5.ref">Comparar con</span><select id="referenceSource"><option value="none" data-i="at.s5.ref_none">Solo control de calidad</option><option value="csv" data-i="at.s5.ref_csv">CSV de referencia por punto</option><option value="noaa" data-i="at.s5.ref_noaa">Estación NOAA por punto</option><option value="chirps_auto" data-i="at.s5.ref_chirps">CHIRPS automático (ClimateSERV)</option><option value="era5" data-i="at.s5.ref_era5">ERA5 automático (Copernicus vía Open-Meteo)</option></select></label>
+                  <div id="referenceConfig" hidden><label class="full-label"><span data-i="at.s5.reftype">Tipo de referencia</span><select id="referenceType"><option value="station" data-i="at.s5.rt_station">Estación observada</option><option value="product" data-i="at.s5.rt_product">Otro producto</option></select></label>
+                    <div id="referenceInputs"></div><label class="full-label"><span data-i="at.s5.lag">Desfase de la referencia</span><select id="referenceLag"><option value="0" data-i="at.s5.lag0">0 · misma fecha</option><option value="-1" data-i="at.s5.lagm1">−1 día · referencia del día d frente a producto del día d − 1 (NOAA GSOD, lectura 12 UTC)</option><option value="1" data-i="at.s5.lagp1">+1 día</option><option value="auto" data-i="at.s5.lagauto">Automático · mayor correlación en ±2 días (exploratorio)</option></select></label><p class="hint" data-i="at.s5.lag_hint">Las estaciones NOAA de Centroamérica con fuente GSOD (bandera S) fechan la lluvia de 24 h al día en que termina la acumulación a las 12 UTC; NASA POWER usa el día UTC 00–24 h. Para NOAA se propone −1 día. El informe muestra la correlación con cada desfase.</p><label class="alignment"><input type="checkbox" id="alignedDays"> <span data-i="at.s5.aligned">Confirmo que ambas fechas representan la misma ventana diaria de acumulación.</span></label><p class="hint" data-i="at.s5.aligned_hint">Sin confirmar el horario se muestra la cobertura, pero no se calculan sesgo ni métricas diarias.</p></div>
+                </div>
+              </div>
+            </section>
+            <div class="start-wrap"><button id="analyzeBtn" class="main-btn"><span data-i="an.run">Analizar precipitación</span><span aria-hidden="true">↗</span></button><div class="tiny" data-i="at.run_sub">Descarga o importa precipitación · Analiza · Compara</div></div>
+          </div>
+        </section>
+
+        <!-- ======================= RESULTADOS ======================= -->
+        <section class="seccion analysis-panel" id="resultados"><div class="analysis-head"><div><p class="eyebrow" data-i="at.res.kicker">RESULTADOS</p><h2 data-i="at.res.h">Exploración estadística</h2></div><div class="result-actions"><button class="line-btn" id="exportDaily" disabled data-i="at.res.daily">CSV diario</button><button class="line-btn" id="exportAnnual" disabled data-i="at.res.annual">CSV anual</button><button class="line-btn" id="exportSummary" disabled data-i="at.res.json">Estadísticos JSON</button><button class="line-btn export-strong" id="exportTxt" disabled data-i="at.res.txt">Descargar TODOS los TXT (.zip)</button></div></div>
+          <div id="statusArea" class="status-card"><span class="status-icon">◎</span><div><strong data-i="at.res.none_t">Sin análisis ejecutado</strong><p data-i="at.res.none_p">Elige hasta seis lugares y pulsa «Analizar precipitación». Los gráficos aparecerán aquí a partir de las series descargadas o importadas.</p></div></div>
+          <div id="results" hidden>
+            <div id="metricCards" class="metrics"></div>
+            <section class="validity-section" id="validityPanel" aria-labelledby="validityTitle"></section>
+            <section class="fixed-section" aria-labelledby="fixedTitle"><div class="fixed-head"><div><p class="eyebrow" data-i="at.fx.kicker">FRECUENCIA DE LLUVIAS INTENSAS</p><h3 id="fixedTitle" data-i="at.fx.h">Días por año según umbral diario</h3></div><label><span data-i="at.fx.point">Lugar analizado</span> <select id="fixedPoint"></select></label></div><div class="fixed-grid" id="fixedGrid"><article class="fixed-card" data-fixed="50.8"><h4 data-i="at.fx.d50">Días con ≥ 50,8 mm</h4><span class="change-badge" id="badge50_8">—</span><div class="fixed-plot" id="fixedPlot50_8"></div><p id="fixedInfo50_8"></p></article><article class="fixed-card" data-fixed="76.2"><h4 data-i="at.fx.d76">Días con ≥ 76,2 mm</h4><span class="change-badge" id="badge76_2">—</span><div class="fixed-plot" id="fixedPlot76_2"></div><p id="fixedInfo76_2"></p></article><article class="fixed-card" data-fixed="101.6"><h4 data-i="at.fx.d101">Días con ≥ 101,6 mm</h4><span class="change-badge" id="badge101_6">—</span><div class="fixed-plot" id="fixedPlot101_6"></div><p id="fixedInfo101_6"></p></article><article class="fixed-card" data-fixed="127"><h4 data-i="at.fx.d127">Días con ≥ 127 mm</h4><span class="change-badge" id="badge127_0">—</span><div class="fixed-plot" id="fixedPlot127_0"></div><p id="fixedInfo127_0"></p></article></div><p class="method-note fixed-method" data-i="at.fx.note">Cada panel muestra conteos anuales, la tendencia Theil–Sen y su intervalo de confianza del 95 %. El porcentaje del círculo es el cambio entre el primer y el último año completo de la recta ajustada: (final − inicial) / inicial × 100. Se requieren ≥ 10 años completos y un valor inicial positivo; «—» indica que no se puede calcular. El porcentaje no indica significancia: para eso está el estado (▲ ▼ ●) con p corregido por autocorrelación y por Holm. Clic en un panel para ver ese umbral en el mapa.</p></section>
+            <section class="data-review" id="verificacion"><div class="fixed-head"><div><p class="eyebrow" data-i="at.vq.kicker">CALIDAD Y TRAZABILIDAD POR PUNTO</p><h3 data-i="at.vq.h">Verificación de precipitación</h3></div><label><span data-i="at.vq.point">Punto</span> <select id="reviewPoint"></select></label></div><div id="qualitySummary" class="metrics"></div><div id="qualityNotes"></div><details><summary data-i="at.vq.cov">Cobertura anual y fuente</summary><div id="qualityDetails"></div></details><div id="verificationSummary"></div><div id="verificationChart" class="verification-chart" hidden></div><div id="verificationTables"></div></section>
+            <section class="dash" id="panel"><div class="dash-head"><div><p class="eyebrow" data-i="at.dash.kicker">PANEL DE DIAGNÓSTICO CLIMÁTICO</p><h3 data-i="at.dash.h">Todas las figuras clave del punto enfocado</h3><p class="hint" data-i="at.dash.hint">Cada figura es interactiva: pase el cursor para ver valores, arrastre para hacer zoom, doble clic para restablecer y use el ícono de cámara para descargar el PNG en alta resolución. «Ampliar» la abre a pantalla completa. El punto enfocado se elige en «Enfoque».</p></div></div><div class="dash-grid" id="dashGrid"></div></section>
+            <h3 class="table-title tabs-title" data-i="at.tabs.h">Explorar una figura a la vez</h3><div class="charttools"><div class="tabs" role="tablist" id="tabs"><button class="tab active" data-tab="annual" data-i="at.tab.annual">Acumulados</button><button class="tab" data-tab="forest" data-i="at.tab.forest">Tendencias ±IC</button><button class="tab" data-tab="indices" data-i="at.tab.indices">Índices ETCCDI</button><button class="tab" data-tab="concentration" data-i="at.tab.concentration">Concentración</button><button class="tab" data-tab="regime" data-i="at.tab.regime">Cambio de régimen</button><button class="tab" data-tab="quantiles" data-i="at.tab.quantiles">Cuantiles</button><button class="tab" data-tab="seasons" data-i="at.tab.seasons">Estaciones</button><button class="tab" data-tab="cycle" data-i="at.tab.cycle">Ciclo anual</button><button class="tab" data-tab="return" data-i="at.tab.return">Retorno</button><button class="tab" data-tab="percentiles" data-i="at.tab.percentiles">Percentiles</button><button class="tab" data-tab="eventdays" data-i="at.tab.eventdays">Solo días extremos</button><button class="tab" data-tab="eventamount" data-i="at.tab.eventamount">Lluvia extrema anual</button><button class="tab" data-tab="eventepisodes" data-i="at.tab.eventepisodes">Episodios anuales</button><button class="tab" data-tab="eventrank" data-i="at.tab.eventrank">Picos extremos</button><button class="tab" data-tab="exceedance" data-i="at.tab.exceedance">Excedencias</button><button class="tab" data-tab="climatology" data-i="at.tab.climatology">Climatología</button><button class="tab" data-tab="anomaly" data-i="at.tab.anomaly">Anomalías</button><button class="tab" data-tab="heatmap" data-i="at.tab.heatmap">Año × mes</button><button class="tab" data-tab="daily" data-i="at.tab.daily">Serie diaria</button><button class="tab" data-tab="correlations" data-i="at.tab.correlations">Correlación</button></div><div class="plot-select"><label><span data-i="at.tabs.focus">Enfoque</span> <select id="focusedPoint"></select></label><label><span data-i="at.tabs.thr">Umbral</span> <select id="focusedPct"><option value="80">P80</option><option value="90">P90</option><option value="95" selected>P95</option><option value="98">P98</option><option value="99">P99</option></select></label><label id="advMetricWrap" hidden><span data-i="at.tabs.series">Serie</span> <select id="advMetric"></select></label></div></div>
+            <div class="chart-card"><button type="button" class="chart-zoom" id="chartZoom" data-ia="title:at.zoom" title="Ver a pantalla completa" data-i="at.zoom_btn">⤢ Pantalla completa</button><div class="chart-caption" id="chartSubtitle">Precipitación acumulada anual</div><div id="chart" class="chart"></div><div class="chart-reading" id="chartReading"></div></div>
+            <h3 class="table-title" id="comparacion" data-i="at.cmp.h">Comparación de estadísticas por punto</h3><div class="table-scroll"><table id="statsTable"><thead><tr><th data-i="at.th.place">Lugar</th><th data-i="at.th.years">Años completos</th><th data-i="at.th.mean">Lluvia media anual</th><th>Rx1día</th><th>Rx5d</th><th data-i="at.th.cdd">Máx. sequía (d)</th><th data-i="at.th.trend">Tendencia</th><th data-i="at.th.change">Cambio del período</th><th>Kendall p*</th><th data-i="at.th.ci">IC 95 %</th><th>p Holm</th><th data-i="at.th.state">Estado</th><th>P80</th><th>P90</th><th>P95</th><th>P98</th><th>P99</th><th data-i="at.th.dp99">Días &gt;P99</th><th data-i="at.th.ep99">Episodios P99</th><th data-i="at.th.rl10">1 en 10 años</th><th data-i="at.th.suit">Idoneidad</th></tr></thead><tbody></tbody></table></div>
+            <p class="method-note" id="metodologia" data-i="at.method_note">* Tendencia Theil–Sen en mm/década con intervalo de confianza del 95 % (Sen, 1968). «Kendall p» es la prueba de Mann-Kendall; «p Holm» la corrige por autocorrelación (Hamed y Rao, 1998, solo cuando vuelve la prueba más exigente) y por haber evaluado varios puntos a la vez (Holm). Estado: ▲ creciente / ▼ decreciente si p Holm &lt; 0,05; ● no concluyente en otro caso (no significa «sin cambio»). Percentiles calculados a partir de lluvia diaria del período de referencia según la muestra elegida. Los productos de malla estiman lluvia de una celda; las estaciones representan su punto de medición. Los episodios agrupan días consecutivos que superan el umbral; faltantes interrumpen los episodios. «1 en 10 años»: nivel de retorno de la lluvia máxima diaria por Gumbel. No se infiere lluvia sobre áreas sin puntos.</p>
+            <div id="txtCatalog" class="txt-catalog"></div><div id="sourceDetails" class="source-details"></div>
+          </div>
+        </section>
+
+        <!-- ======================= ESTACIONES CR ======================= -->
+        <section class="seccion analysis-panel val-panel" id="validacion">
+          <div class="analysis-head"><div><p class="eyebrow" data-i="at.val.kicker">VALIDACIÓN · SATÉLITE / REANÁLISIS vs ESTACIONES DE COSTA RICA</p><h2 data-i="at.val.h">¿Coincide la NASA con los pluviómetros del país?</h2></div>
+            <div class="result-actions"><button class="line-btn" id="valExportTxt" disabled data-i="at.val.txt">Tabla de métricas (TXT)</button><button class="line-btn" id="valExportJson" disabled data-i="at.val.json">Resultados (JSON)</button></div></div>
+          <p class="val-intro" data-i="at.val.intro">Compara, día a día, la lluvia de la celda satelital que contiene a cada estación con la medida por su pluviómetro. Solo se usan días con dato en ambas fuentes (los faltantes nunca se convierten en cero). Las estaciones vienen de NOAA NCEI GHCN-Daily, que distribuye la red sinóptica de Costa Rica (IMN) intercambiada por la OMM; también puede cargar un CSV diario propio.</p>
+          <div class="val-form">
+            <div class="val-col"><h4><span class="step">A</span> <span data-i="at.val.a">Estaciones de referencia</span></h4><div id="valStations" class="val-stations"><div class="empty-points" data-i="at.val.loading">Cargando catálogo de estaciones…</div></div>
+              <p class="hint" data-i="at.val.ahint">Atenuadas: estaciones sin datos recientes en NOAA. Las series sinópticas de Costa Rica tienen muchos días sin reporte: es normal ver 30-60 % de cobertura.</p></div>
+            <div class="val-col"><h4><span class="step">B</span> <span data-i="at.val.b">Producto y período</span></h4>
+              <label class="full-label"><span data-i="at.val.product">Producto a validar</span> <select id="valSource"><option value="gpm" data-i="at.val.gpm">GPM IMERG · satelital (celda 0,1°)</option><option value="merra2" data-i="at.val.merra2">MERRA-2 · reanálisis (celda ½° × ⅝°)</option></select></label>
+              <div class="double"><label><span data-i="at.s2.from">Desde</span> <input id="valStart" type="number" min="1900" max="2026" value="2001"></label><label><span data-i="at.s2.to">Hasta</span> <input id="valEnd" type="number" min="1900" max="2026" value="2024"></label></div>
+              <details class="val-own"><summary data-i="at.val.own">Añadir una estación propia (CSV)</summary>
+                <p class="hint" data-i="at.val.ownhint">Columnas fecha (AAAA-MM-DD) y precipitacion_mm; separador coma, punto y coma o tabulador; máx. 10 MB. Los días vacíos se tratan como faltantes.</p>
+                <label class="full-label"><span data-i="at.val.name">Nombre</span> <input id="valName" type="text" maxlength="80" data-ia="placeholder:at.val.name_ph" placeholder="p. ej. Turrialba CATIE"></label>
+                <label class="full-label"><span data-i="at.val.inst">Institución</span> <input id="valInst" type="text" maxlength="80" data-ia="placeholder:at.val.inst_ph" placeholder="p. ej. IMN, ICE, UCR"></label>
+                <div class="double"><label><span data-i="at.s4.lat">Latitud</span> <input id="valLat" type="number" step="0.0001" placeholder="9.8800"></label><label><span data-i="at.s4.lon">Longitud</span> <input id="valLon" type="number" step="0.0001" placeholder="-83.6300"></label></div>
+                <label class="full-label"><span data-i="at.val.file">Archivo CSV</span> <input id="valCsv" type="file" accept=".csv,.txt,text/csv"></label>
+              </details>
+              <button class="main-btn val-run" id="valRun"><span data-i="at.val.run">Comparar con estaciones</span><span aria-hidden="true">↗</span></button>
+            </div>
+          </div>
+          <div id="valStatus" class="status-card" hidden></div>
+          <div id="valResults" hidden>
+            <div class="val-toolbar"><label><span data-i="at.val.focus">Estación enfocada</span> <select id="valFocus"></select></label><span class="hint" id="valNote"></span></div>
+            <div class="table-scroll"><table id="valTable"><thead></thead><tbody></tbody></table></div>
+            <div class="chart-reading" id="valReading"></div>
+            <div class="dash-grid" id="valGrid"></div>
+            <p class="method-note" data-i="at.val.note">Métricas: PBIAS = 100·(Σsat − Σest)/Σest; KGE de Kling et al. (2012); POD = aciertos/(aciertos + fallos); FAR = falsas alarmas/(aciertos + falsas alarmas); CSI = aciertos/(aciertos + fallos + falsas alarmas); HSS de Heidke. Escala: un pluviómetro mide un punto; la celda IMERG promedia ≈ 122 km². Que el satélite subestime picos y sobrestime lloviznas es esperable y no prueba por sí solo un error. Día: NASA POWER usa el día UTC; si la correlación mejora con ±1 día, se aplica ese desfase y se informa.</p>
+          </div>
+        </section>
+
+        <!-- ======================= FUENTES ======================= -->
+        <section class="seccion resources" id="recursos"><div class="seccion-cab"><p class="sobretitulo" data-i="at.src_sec.kicker">Cobertura centroamericana</p><h2 data-i="at.src_sec.h">Fuentes de precipitación</h2><p data-i="at.src_sec.p">Qué descarga el atlas automáticamente y qué puede importar usted en CSV.</p></div><div id="resourceCards" class="resource-grid"></div></section>
+
+        <!-- ======================= APRENDE ======================= -->
+        <section class="seccion" id="aprende" aria-labelledby="t-apr">
+          <div class="seccion-cab"><p class="sobretitulo" data-i="apr.kicker">Para empezar desde cero</p><h2 id="t-apr" data-i="apr.h">Aprende cómo funciona</h2><p data-i="apr.p">No necesitas saber de clima ni de estadística.</p></div>
+          <div id="aprende-contenido"></div>
+        </section>
+
+        <!-- ======================= MÉTODO ======================= -->
+        <section class="seccion" id="metodo" aria-labelledby="t-met">
+          <div class="seccion-cab"><h2 id="t-met" data-i="sec.met.h">Método y límites</h2><p data-i="sec.met.p">Cuatro pasos que cualquiera puede repetir, y lo que este atlas no permite concluir.</p></div>
+          <ol class="pasos" id="pasos"></ol>
+          <div class="limites"><div class="panel"><h3 data-i="met.si">Qué sí muestra</h3><ul id="lista-si"></ul></div><div class="panel"><h3 data-i="met.no">Qué no muestra</h3><ul id="lista-no"></ul></div></div>
+          <div class="panel metodo-atlas"><h3 data-i="at.met.h">Estadística aplicada</h3><ul id="lista-metodo-atlas"></ul></div>
+        </section>
+      </main>
+
+      <footer class="pie">
+        <div class="pie-texto">
+          <p id="pie-fuente"></p>
+          <p data-i="foot.tool">Herramienta educativa y de planificación. No es un pronóstico ni una alerta.</p>
+          <p class="foot"><span data-i="foot.sources">Fuentes oficiales:</span> <a href="https://power.larc.nasa.gov/docs/services/api/temporal/daily/" target="_blank" rel="noopener noreferrer">NASA POWER</a>, <a href="https://gpm.nasa.gov/data/imerg" target="_blank" rel="noopener noreferrer">NASA GPM IMERG</a>, <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">ERA5 de Copernicus/ECMWF vía Open-Meteo (CC-BY 4.0)</a>, <a href="https://climateserv.servirglobal.net/" target="_blank" rel="noopener noreferrer">CHIRPS vía ClimateSERV</a>, <a href="https://www.chc.ucsb.edu/data/chirps3" target="_blank" rel="noopener noreferrer">CHIRPS v3</a> (CSV), <a href="https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily" target="_blank" rel="noopener noreferrer">NOAA NCEI GHCN-Daily</a>, <a href="https://www.spaceappschallenge.org/" target="_blank" rel="noopener noreferrer">NASA Space Apps</a>. <span data-i="at.foot.borders">Fronteras Natural Earth (dominio público); mapa base © OpenStreetMap. Para decisiones operativas contraste con los servicios meteorológicos oficiales de cada país.</span></p>
+        </div>
+        <img class="marca-agua marca-agua-pie" src="assets/marca-agua.png" alt="" aria-hidden="true" draggable="false" />
+      </footer>
+    </div>
+
+    <div class="fig-modal" id="figModal" hidden><div class="fig-modal-box" role="dialog" aria-modal="true" data-ia="aria-label:at.zoom"><button type="button" class="fig-modal-close" id="figModalClose" data-ia="title:at.close" title="Cerrar (Esc)">×</button><div id="figModalPlot"></div></div></div>
+    <button type="button" id="toggleSidebar" hidden>⟨</button>
+
+    <script src="js/00-base.js"></script>
+    <script src="data/asistente.json.js"></script>
+    <script src="js/i18n.js?v=7.0"></script>
+    <script src="js/i18n-atlas.js?v=7.0"></script>
+    <script src="js/traductor-nucleo.js?v=7.0"></script>
+    <script src="js/traductor-diccionario.js?v=7.0"></script>
+    <script src="js/util.js"></script>
+    <script src="js/a11y.js"></script>
+    <script src="js/geo-ca.js?v=7.0"></script>
+    <script src="js/texto.js"></script>
+    <script src="js/asistente.js"></script>
+    <script src="js/traductor-dom.js?v=7.0"></script>
+    <script src="atlas/data-tools.js?v=7.0"></script>
+    <script src="atlas/app.js?v=7.0"></script>
+    <script src="atlas/validacion.js?v=7.0"></script>
+    <script src="js/shell.js?v=7.0"></script>
+  </body>
+</html>

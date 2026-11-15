@@ -1,0 +1,270 @@
+/* Atlas unificado · une los componentes del atlas (css/atlas-tema.css, generado) con la interfaz de Phyllobytes
+   (css/phyllobytes.css). Aquí solo hay distribución y ajustes finos; los colores salen de las variables de Phyllobytes. */
+
+/* Variables que usa el CSS del atlas, apuntando a la paleta de Phyllobytes (así responden a contraste/daltonismo). */
+:root { --ink: var(--texto); --muted: var(--suave); --green: var(--cian); --dark: var(--tinta); --accent: var(--naranja);
+  --line: var(--borde); --paper: transparent; --radius: var(--radio); }
+
+/* ---------- cajas del atlas como paneles de Phyllobytes ---------- */
+.map-shell, .analysis-panel, .fixed-section, .data-review, .dash, .chart-card, .validity-section, .resources,
+.status-card, .val-col, .traffic, .cell-card, .floating-chart, .fig-modal-box {
+  background: var(--panel); border: 1px solid var(--borde); border-radius: var(--radio); box-shadow: var(--sombra);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: var(--texto);
+}
+.analysis-panel { padding: clamp(1rem, 2vw, 1.6rem); margin-top: 3rem; }
+.analysis-panel .analysis-panel, #results .fixed-section, #results .data-review, #results .dash, #results .validity-section { box-shadow: none; }
+.seccion.analysis-panel { padding-top: clamp(1rem, 2vw, 1.6rem); }
+.validity-section { border-top: 1px solid var(--borde); padding: 1rem; }
+.status-card { padding: 1rem 1.2rem; }
+.status-card.destello { outline: 2px solid var(--cian); outline-offset: 3px; transition: outline-color .3s; }
+.eyebrow { color: var(--cian); letter-spacing: .12em; font-size: .72rem; font-weight: 700; margin: 0 0 .2rem; }
+.analysis-head h2, .seccion-cab h2 { font-family: var(--titulo); }
+.analysis-head { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem; }
+.result-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.method-note, .hint, .smallnote, .map-note, .map-explainer, .chart-reading, .dash-reading { color: var(--suave); }
+.table-scroll { border-radius: .9rem; border: 1px solid var(--borde); }
+.table-scroll th { background: rgba(255, 255, 255, .06); color: var(--texto); }
+.table-scroll td { border-color: var(--borde); }
+
+/* Botones del atlas con forma de botón de Phyllobytes */
+.line-btn, .subtle-action, .chart-zoom, .dash-zoom { border-radius: 999px; border: 1px solid var(--borde-fuerte); background: rgba(255, 255, 255, .06); color: var(--texto); padding: .45rem .95rem; font: 600 .85rem var(--fuente); cursor: pointer; }
+.line-btn:hover:not(:disabled), .subtle-action:hover, .chart-zoom:hover, .dash-zoom:hover { background: rgba(95, 208, 238, .16); border-color: var(--cian); }
+.line-btn:disabled { opacity: .45; cursor: not-allowed; }
+.export-strong { background: var(--cian); color: var(--tinta); border-color: var(--cian); }
+.main-btn { display: inline-flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; border: 0; border-radius: 999px;
+  padding: .95rem 1.5rem; font: 750 1.05rem var(--fuente); background: var(--naranja); color: #1b0d00; cursor: pointer; box-shadow: 0 10px 28px rgba(255, 138, 36, .28); }
+.main-btn:hover { filter: brightness(1.07); }
+.main-btn:disabled { opacity: .6; cursor: progress; }
+.tab { border-radius: 999px; border: 1px solid var(--borde); background: rgba(255, 255, 255, .05); color: var(--suave); }
+.tab.active { background: var(--cian); color: var(--tinta); border-color: var(--cian); }
+.step { display: inline-grid; place-items: center; min-width: 1.9rem; height: 1.9rem; border-radius: 999px; background: var(--cian); color: var(--tinta); font: 800 .78rem var(--fuente); margin-right: .35rem; }
+
+/* Formularios del atlas: mismo aspecto que los campos de Phyllobytes */
+.controls input:not([type=checkbox]):not([type=file]), .controls select, .map-toolbar select, .plot-select select, .fixed-head select,
+.val-col input:not([type=checkbox]):not([type=file]), .val-col select, .val-toolbar select, #source {
+  width: 100%; color: var(--texto); background: rgba(0, 0, 0, .28); border: 1px solid var(--borde-fuerte); border-radius: .75rem; padding: .55rem .75rem; font: inherit; }
+.controls input:focus, .controls select:focus, .map-toolbar select:focus, .val-col input:focus, .val-col select:focus { outline: 2px solid var(--cian); outline-offset: 1px; border-color: var(--cian); }
+
+.double { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-bottom: .6rem; }
+.double label, .full-label { display: grid; gap: .3rem; color: var(--suave); font-size: .85rem; }
+.full-label { margin: .7rem 0 .2rem; }
+.checkrow { display: flex; flex-wrap: wrap; gap: .4rem; }
+.checkrow label { display: inline-flex; gap: .35rem; align-items: center; padding: .35rem .7rem; border-radius: 999px; border: 1px solid var(--borde); background: rgba(255, 255, 255, .04); cursor: pointer; }
+.grid-badge { margin-top: .6rem; padding: .5rem .7rem; border-left: 3px solid var(--cian); background: rgba(95, 208, 238, .08); border-radius: .5rem; font-size: .82rem; }
+.controls h3 { display: flex; align-items: center; flex-wrap: wrap; gap: .2rem; margin: 0 0 .8rem; font-size: 1.02rem; }
+.controls h3 small { margin-left: auto; color: var(--suave); font-weight: 600; }
+.controls section { border: 0; padding: 0; margin: 0; }
+
+/* ---------- ANALIZAR: guía de pasos ---------- */
+.guia-pasos { list-style: none; display: flex; flex-wrap: wrap; gap: .6rem; padding: 0; margin: 0 0 1.2rem; }
+.guia-pasos a { display: inline-flex; align-items: center; gap: .55rem; padding: .45rem .95rem .45rem .45rem; border-radius: 999px; border: 1px solid var(--borde);
+  background: rgba(255, 255, 255, .05); color: var(--texto); text-decoration: none; font-weight: 650; font-size: .9rem; }
+.guia-pasos a:hover { border-color: var(--cian); }
+.guia-pasos b { display: grid; place-items: center; width: 1.7rem; height: 1.7rem; border-radius: 999px; background: var(--cian); color: var(--tinta); }
+
+/* Paso 1: tres tarjetas (fuente, período, extremos) */
+.bloque-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr)); gap: 1rem; margin-bottom: 1rem; align-items: start; }
+.bloque-grid > .panel, .lugares { background: var(--panel); border: 1px solid var(--borde); box-shadow: var(--sombra); }
+#paso-datos { grid-column: span 1; }
+
+/* Paso 2: mapa grande + panel de lugares */
+.analizar-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, 23rem); gap: 1rem; align-items: start; margin-bottom: 1rem; }
+.map-shell { padding: 0; overflow: hidden; }
+.map-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .6rem; padding: .9rem 1.1rem; border-bottom: 1px solid var(--borde); }
+.map-bar strong { display: block; font-family: var(--titulo); font-size: 1.05rem; }
+.map-bar small { color: var(--suave); }
+.map-badges span { background: rgba(255, 255, 255, .07); border: 1px solid var(--borde); color: var(--suave); border-radius: 999px; padding: .2rem .6rem; font-size: .75rem; }
+.map-space { position: relative; min-height: 32rem; background: #0d2329; }
+.leaflet-map { height: 32rem; }
+.map-toolbar { display: flex; flex-wrap: wrap; gap: .7rem 1rem; align-items: end; padding: .9rem 1.1rem; border-top: 1px solid var(--borde); background: rgba(0, 0, 0, .12); }
+.map-toolbar label { display: grid; gap: .25rem; font-size: .8rem; color: var(--suave); }
+.map-toolbar .check-inline { display: inline-flex; align-items: center; gap: .4rem; }
+.map-explainer { padding: 0 1.1rem 1rem; margin: 0; font-size: .85rem; }
+.map-guide, .map-note { background: rgba(8, 21, 26, .82); color: var(--texto); border: 1px solid var(--borde); border-radius: .7rem; }
+.atlas-marca-mapa { left: auto; right: .7rem; top: .7rem; z-index: 450; }
+.leaflet-container { background: #0d2329; font-family: var(--fuente); }
+.leaflet-control-attribution { background: rgba(8, 21, 26, .75) !important; color: var(--suave) !important; }
+.leaflet-control-attribution a { color: var(--cian-2) !important; }
+.leaflet-bar a { background: #10272d; color: var(--texto); border-color: var(--borde); }
+.leaflet-bar a:hover { background: #17363e; }
+.leaflet-tooltip { background: #10272d; color: var(--texto); border-color: var(--borde-fuerte); }
+.pais-etiqueta { background: none; border: 0; }
+.pais-etiqueta span { display: inline-block; transform: translate(-50%, -50%); white-space: nowrap; padding: .1rem .45rem; border-radius: 999px;
+  background: rgba(8, 21, 26, .72); color: #e9fbff; border: 1px solid rgba(95, 208, 238, .55); font: 700 .74rem var(--fuente); letter-spacing: .02em; pointer-events: none; }
+
+.lugares { position: sticky; top: 5.5rem; border-radius: var(--radio); padding: 1.1rem; display: grid; gap: .8rem; }
+.lugares .searchbar { display: flex; gap: .45rem; }
+.lugares .searchbar input { flex: 1; }
+.square { flex: none; width: 2.6rem; border-radius: 999px; border: 0; background: var(--cian); color: var(--tinta); font: 800 1.2rem var(--fuente); cursor: pointer; }
+.smallnote { font-size: .82rem; margin: .7rem 0; padding: .6rem .7rem; border-radius: .7rem; background: rgba(95, 208, 238, .07); border: 1px dashed rgba(95, 208, 238, .35); }
+.place-list { display: grid; gap: .45rem; margin: .5rem 0; }
+.empty-points { padding: .9rem; border: 1px dashed var(--borde-fuerte); border-radius: .8rem; color: var(--suave); text-align: center; font-size: .85rem; }
+.coordinate-entry { margin-top: .6rem; padding: .7rem .8rem; border: 1px solid var(--borde); border-radius: .8rem; background: rgba(0, 0, 0, .12); }
+.coordinate-entry summary { cursor: pointer; font-weight: 650; color: var(--cian-2); }
+.coordinate-entry[open] summary { margin-bottom: .6rem; }
+.coordinate-entry .line-btn { width: 100%; margin-top: .3rem; }
+.ir-analizar { justify-self: start; color: var(--cian-2); font-weight: 700; text-decoration: none; font-size: .9rem; }
+.ir-analizar:hover { text-decoration: underline; }
+
+/* Paso 3: verificación + botón principal */
+.analizar-final { grid-template-columns: 1fr; }
+.paso-ancho h3 small { margin-left: .5rem; font-size: .75rem; padding: .1rem .5rem; border-radius: 999px; border: 1px solid var(--borde); }
+.dos-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: .6rem 1.6rem; }
+.alignment { display: flex; gap: .5rem; align-items: flex-start; margin-top: .6rem; font-size: .88rem; }
+.start-wrap { display: grid; gap: .4rem; justify-items: center; max-width: 34rem; width: 100%; margin: .4rem auto 0; }
+.start-wrap .tiny { color: var(--suave); font-size: .82rem; }
+
+/* ---------- resultados ---------- */
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: .7rem; }
+.metric { background: rgba(255, 255, 255, .05); border: 1px solid var(--borde); border-radius: 1rem; }
+.fixed-card { background: rgba(255, 255, 255, .04); border: 1px solid var(--borde); border-radius: 1rem; }
+.fixed-card:hover, .fixed-card.selected { border-color: var(--cian); }
+.dash-card { background: rgba(255, 255, 255, .03); border: 1px solid var(--borde); border-radius: 1rem; overflow: hidden; }
+.charttools { gap: .8rem; }
+.tabs { display: flex; flex-wrap: wrap; gap: .35rem; }
+.chart-card { padding: .8rem; position: relative; }
+.resource-grid article { background: var(--panel); border: 1px solid var(--borde); border-radius: 1rem; }
+.resource-grid a { color: var(--cian-2); }
+.metodo-atlas { margin-top: 1rem; }
+.metodo-atlas ul { margin: .6rem 0 0; padding-left: 1.2rem; display: grid; gap: .4rem; color: var(--suave); }
+
+/* Semáforo (del atlas) con la tipografía de títulos de Phyllobytes */
+.traffic { padding: 1rem 1.2rem; }
+.tl-text h3 { font-family: var(--titulo); }
+.tl-red-text { color: #ff8a80; } .tl-yellow-text { color: #ffd23f; } .tl-green-text { color: #8fd9a8; }
+
+/* ---------- portada: mini mapa de Centroamérica ---------- */
+.hero-mapa-caja { position: relative; }
+.hero-ca { width: 100%; height: auto; display: block; }
+.hero-vecinos path { fill: rgba(255, 255, 255, .05); stroke: rgba(255, 255, 255, .18); stroke-width: 1.2; }
+.hero-pais { fill: rgba(95, 208, 238, .16); stroke: var(--cian); stroke-width: 1.6; cursor: pointer; transition: fill .2s; }
+.hero-pais:hover, .hero-pais:focus-visible { fill: rgba(255, 138, 36, .45); stroke: var(--naranja); outline: none; }
+.resumen-chips[hidden] { display: none; }
+
+/* ---------- avisos ---------- */
+#aviso-idioma, #aviso-servidor { margin-top: 1rem; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1180px) { .analizar-grid { grid-template-columns: 1fr; } .lugares { position: static; } }
+@media (max-width: 700px) {
+  .map-space { min-height: 24rem; } .leaflet-map { height: 24rem; }
+  .double { grid-template-columns: 1fr; }
+  .analysis-head { align-items: flex-start; }
+  .result-actions .line-btn { flex: 1 1 auto; }
+}
+/* Contraste alto: bordes visibles en todo el atlas */
+[data-contraste="alto"] .map-shell, [data-contraste="alto"] .analysis-panel, [data-contraste="alto"] .bloque-grid > .panel, [data-contraste="alto"] .lugares,
+[data-contraste="alto"] .metric, [data-contraste="alto"] .fixed-card, [data-contraste="alto"] .dash-card { border-color: #fff; background: #000; }
+[data-contraste="alto"] .main-btn { background: #ffd23f; color: #000; }
+
+/* Panel de idoneidad: mismos colores de estado, en versión translúcida de Phyllobytes */
+.vsummary { border-radius: 1rem; border: 1px solid; }
+.vsummary.ok { background: rgba(143, 217, 168, .14); border-color: rgba(143, 217, 168, .55); color: #c9f2d6; }
+.vsummary.warn { background: rgba(255, 210, 63, .12); border-color: rgba(255, 210, 63, .5); color: #ffe9a3; }
+.vsummary.bad { background: rgba(255, 128, 115, .13); border-color: rgba(255, 128, 115, .5); color: #ffc9c2; }
+.vchip { border-radius: 999px; border: 1px solid var(--borde); background: rgba(255, 255, 255, .05); color: var(--texto); }
+.vchip.active { border-color: var(--cian); box-shadow: 0 0 0 1px var(--cian) inset; }
+.checks li { background: rgba(255, 255, 255, .04); border: 1px solid var(--borde); border-radius: .8rem; }
+[data-contraste="alto"] .vsummary { background: #000; color: #fff; border-color: #fff; }
+
+/* Celular: sin desplazamiento lateral y sin que el nombre se monte sobre el selector de idioma */
+html, body { overflow-x: clip; }
+@media (max-width: 480px) { .superior .marca-sup .wordmark-mini { display: none !important; } .superior { max-width: 100%; } }
+@media (max-width: 700px) { .pais-etiqueta span { font-size: .6rem; padding: 0 .3rem; } }
+
+
+/* =====================================================================
+   Márgenes internos: ningún contenido pegado al borde de su panel
+   ===================================================================== */
+/* Paneles grandes (secciones del atlas) */
+.analysis-panel, .seccion.analysis-panel { padding: clamp(1.25rem, 2.4vw, 2rem); }
+.map-bar { padding: 1.1rem 1.4rem; }
+.map-toolbar { padding: 1.1rem 1.4rem; gap: .9rem 1.2rem; }
+.map-explainer { padding: 0 1.4rem 1.2rem; }
+.bloque-grid > .panel, .lugares { padding: 1.4rem 1.5rem; }
+.bloque-grid { gap: 1.2rem; }
+.analizar-grid { gap: 1.2rem; }
+.lugares { gap: 1rem; }
+
+/* Secciones dentro de Resultados: separadas entre sí y con aire por dentro */
+#results > * + * { margin-top: 1.4rem; }
+.validity-section, .fixed-section, .data-review, .dash, .chart-card, .traffic, .status-card, .resources .resource-grid article {
+  padding: 1.35rem 1.5rem; }
+.validity-section { border-top-width: 1px; }
+.fixed-head, .dash-head, .validity-head, .analysis-head { gap: 1rem 1.5rem; margin-bottom: 1.1rem; }
+.validity-body { gap: 1rem; }
+.charttools { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem; margin: 1.6rem 0 .9rem; }
+.plot-select { display: flex; flex-wrap: wrap; gap: .8rem 1rem; }
+.table-title { margin: 1.8rem 0 .8rem; }
+.method-note { margin-top: 1rem; line-height: 1.6; }
+
+/* Tarjetas pequeñas dentro de paneles */
+.metrics { gap: .9rem; }
+.metric { padding: 1rem 1.1rem; }
+.fixed-grid { gap: 1rem; }
+.fixed-card { padding: 1rem 1.1rem 1.1rem; }
+.fixed-card p { margin: .7rem 0 0; }
+.dash-grid { gap: 1.1rem; }
+.dash-card { padding: 0; }
+.dash-tools { padding: .85rem 1.1rem; gap: .8rem; }
+.dash-reading, .chart-reading { padding: .85rem 1.1rem; margin: 0; }
+.chart-card .chart-caption { padding: .2rem .4rem .6rem; }
+.chart-card .chart-zoom { margin: 0 0 .5rem; }
+.checks { gap: .7rem; }
+.checks li { padding: .8rem .95rem; gap: .7rem; }
+.vsummary { padding: 1.1rem 1.2rem; }
+.vchips { gap: .5rem; }
+.vchip { padding: .4rem .85rem; }
+.tl-head { gap: 1.1rem; }
+.tl-reasons li { margin: .45rem 0; }
+.tl-legend ul { padding: .2rem .2rem 0; }
+.traffic h4 { margin: 1.3rem 0 .7rem; }
+.table-scroll th, .table-scroll td { padding: .6rem .8rem; }
+.status-card { gap: 1rem; }
+
+/* Formularios: aire entre etiquetas, campos y ayudas */
+.controls h3 { margin-bottom: 1rem; }
+.hint { margin: .5rem 0 .2rem; line-height: 1.55; }
+.full-label { margin: .9rem 0 .25rem; }
+.double { gap: .9rem; margin-bottom: .7rem; }
+.grid-badge { padding: .65rem .85rem; margin-top: .8rem; }
+.smallnote { padding: .8rem .9rem; }
+.coordinate-entry { padding: .9rem 1rem; }
+.coordinate-entry[open] summary { margin-bottom: .8rem; }
+.place-list { gap: .6rem; margin: .7rem 0; }
+.pointitem, .place-list > * { padding: .75rem .9rem; border-radius: .8rem; }
+.empty-points { padding: 1.1rem; }
+.dos-col { gap: .8rem 2rem; }
+.import-card, .station-card { padding: 1rem 1.1rem; border-radius: .9rem; margin: .7rem 0; }
+.cell-card { padding: 1.1rem 1.2rem; }
+
+/* Estaciones CR y Fuentes */
+.val-intro { margin: 0 0 1.2rem; line-height: 1.6; }
+.val-form { gap: 1.2rem; }
+.val-col { padding: 1.3rem 1.4rem; }
+.val-col h4 { margin: 0 0 .9rem; }
+.val-stations { gap: .6rem; }
+.val-st { padding: .7rem .9rem; }
+.val-toolbar { display: flex; flex-wrap: wrap; gap: .8rem 1.2rem; align-items: center; margin: 1.2rem 0 1rem; }
+.resource-grid { gap: 1rem; }
+.resource-grid article { padding: 1.2rem 1.3rem; }
+
+/* =====================================================================
+   Accesibilidad: los botones A · A+ · A++ siempre en una sola fila
+   (en español la descripción es más larga y los empujaba a otra línea)
+   ===================================================================== */
+.panel-acceso .opcion { gap: .8rem; }
+.panel-acceso .opcion > div:first-child { min-width: 0; flex: 1 1 auto; }
+.panel-acceso .seg { flex: none; flex-wrap: nowrap; white-space: nowrap; }
+.panel-acceso .seg button { padding: .35rem .7rem; }
+
+/* =====================================================================
+   Listas desplegables legibles: fondo oscuro sólido y texto claro
+   (antes el texto era negro sobre el fondo oscuro del selector)
+   ===================================================================== */
+select { color-scheme: dark; }
+select option, select optgroup { background-color: #10272d; color: #eef7f7; }
+select optgroup { color: #7fdcf1; font-weight: 700; }
+select option:checked { background-color: #1d4a55; color: #ffffff; }
+select option:disabled { color: #8a9a9e; }
+[data-contraste="alto"] select option, [data-contraste="alto"] select optgroup { background-color: #000; color: #fff; }
